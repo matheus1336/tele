@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telecontrol - Gerenciamento de Pós-Venda</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <h1>Telecontrol</h1>
+                <p>Gerenciamento de Pós-Venda</p>
+            </div>
+            <nav class="nav">
+                <a href="#" class="nav-link active">Cadastro de Pedidos</a>
+                <a href="#" class="nav-link">Consultas</a>
+                <a href="#" class="nav-link">Relatórios</a>
+                <a href="#" class="nav-link">Configurações</a>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h2>Cadastro de Pedidos de Peças</h2>
+                <button class="btn btn-primary" id="newOrderBtn">
+                    <span class="icon">+</span>
+                    Novo Pedido
+                </button>
+            </div>
+
+            <div class="form-section" id="orderForm" style="display: none;">
+                <div class="form-header">
+                    <h3>Informações do Pedido</h3>
+                    <button class="btn btn-secondary" id="cancelBtn">Cancelar</button>
+                </div>
+
+                <form id="orderFormElement">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="orderNumber">Número do Pedido</label>
+                            <input type="text" id="orderNumber" name="orderNumber" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="orderDate">Data do Pedido</label>
+                            <input type="date" id="orderDate" name="orderDate" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customerName">Nome do Cliente</label>
+                            <input type="text" id="customerName" name="customerName" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customerPhone">Telefone</label>
+                            <input type="tel" id="customerPhone" name="customerPhone" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customerEmail">E-mail</label>
+                            <input type="email" id="customerEmail" name="customerEmail">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="equipmentModel">Modelo do Equipamento</label>
+                            <select id="equipmentModel" name="equipmentModel" required>
+                                <option value="">Selecione o modelo</option>
+                                <option value="TC-100">TC-100</option>
+                                <option value="TC-200">TC-200</option>
+                                <option value="TC-300">TC-300</option>
+                                <option value="TC-400">TC-400</option>
+                                <option value="TC-500">TC-500</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="serialNumber">Número de Série</label>
+                            <input type="text" id="serialNumber" name="serialNumber" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="priority">Prioridade</label>
+                            <select id="priority" name="priority" required>
+                                <option value="">Selecione a prioridade</option>
+                                <option value="baixa">Baixa</option>
+                                <option value="media">Média</option>
+                                <option value="alta">Alta</option>
+                                <option value="urgente">Urgente</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="description">Descrição do Problema</label>
+                        <textarea id="description" name="description" rows="4" placeholder="Descreva o problema detalhadamente..."></textarea>
+                    </div>
+
+                    <div class="parts-section">
+                        <div class="section-header">
+                            <h4>Peças Solicitadas</h4>
+                            <button type="button" class="btn btn-secondary" id="addPartBtn">
+                                <span class="icon">+</span>
+                                Adicionar Peça
+                            </button>
+                        </div>
+
+                        <div class="parts-list" id="partsList">
+                            <!-- Parts will be added dynamically -->
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="saveAsDraftBtn">Salvar como Rascunho</button>
+                        <button type="submit" class="btn btn-primary">Salvar Pedido</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="orders-section">
+                <div class="section-header">
+                    <h3>Pedidos Recentes</h3>
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Buscar pedidos...">
+                        <button class="btn btn-secondary" id="searchBtn">
+                            <span class="icon">🔍</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="orders-table-container">
+                    <table class="orders-table" id="ordersTable">
+                        <thead>
+                            <tr>
+                                <th>Pedido</th>
+                                <th>Data</th>
+                                <th>Cliente</th>
+                                <th>Modelo</th>
+                                <th>Status</th>
+                                <th>Prioridade</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody">
+                            <!-- Orders will be populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal for part selection -->
+    <div class="modal" id="partModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Adicionar Peça</h4>
+                <button class="modal-close" id="closePartModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="partCode">Código da Peça</label>
+                    <input type="text" id="partCode" placeholder="Digite o código da peça">
+                </div>
+                <div class="form-group">
+                    <label for="partName">Nome da Peça</label>
+                    <input type="text" id="partName" placeholder="Nome da peça">
+                </div>
+                <div class="form-group">
+                    <label for="partQuantity">Quantidade</label>
+                    <input type="number" id="partQuantity" min="1" value="1">
+                </div>
+                <div class="form-group">
+                    <label for="partPrice">Preço Unitário (R$)</label>
+                    <input type="number" id="partPrice" step="0.01" min="0" placeholder="0,00">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelPartBtn">Cancelar</button>
+                <button class="btn btn-primary" id="confirmPartBtn">Adicionar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
