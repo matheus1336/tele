@@ -544,16 +544,6 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-// Auto-save functionality (optional)
-let autoSaveTimer;
-function startAutoSave() {
-    clearTimeout(autoSaveTimer);
-    autoSaveTimer = setTimeout(() => {
-        // Auto-save logic here if needed
-        console.log('Auto-save triggered');
-    }, 30000); // 30 seconds
-}
-
 // Form validation
 function validateForm() {
     const requiredFields = [
